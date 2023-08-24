@@ -5,10 +5,11 @@ import { Button } from '@material-tailwind/react';
 export default function Contact() {
   return (
     
-    <div className="container my-24 mx-auto md:px-6">
+    <div className="container my-10 mt-10 mx-auto md:px-6">
       {/*  Section: Design Block  */}
         <section className="mb-32">
-            <div className="relative h-[300px] overflow-hidden bg-cover bg-[50%] bg-no-repeat bg-[url('https://t3.ftcdn.net/jpg/04/56/01/02/360_F_456010263_F6tHQQocWNuuGJqLZxT8tlu6BXADR9Cf.jpg')]">
+            {/* Image cred: https://t3.ftcdn.net/jpg/04/56/01/02/360_F_456010263_F6tHQQocWNuuGJqLZxT8tlu6BXADR9Cf.jpg */}
+            <div className="relative h-[320px] rounded-lg overflow-hidden bg-cover bg-[50%] bg-no-repeat bg-[url('https://t3.ftcdn.net/jpg/04/56/01/02/360_F_456010263_F6tHQQocWNuuGJqLZxT8tlu6BXADR9Cf.jpg')]">
             </div>
 
             <div className="container px-6 md:px-12">
@@ -76,7 +77,7 @@ export default function Contact() {
 
                                         <div className="ml-6 grow">
                                             <p className="mb-2 font-bold text-2xl dark:text-indigo-50">
-                                              Reach me by phone or email
+                                              Hayden Garry
                                             </p>
                                             <p className="text-indigo-500 text-2xl dark:text-indigo-50">
                                               hayden.garry99@gmail.com@example.com
@@ -84,11 +85,27 @@ export default function Contact() {
                                             <p className="text-indigo-500 text-2xl dark:text-indigo-50">
                                               +1 619-733-1409
                                             </p>
+
+                                            <div className="pt-5 flex items-center text text-indigo-500 text-2xl dark:text-indigo-50">
+                                                <ion-icon name="logo-linkedin"></ion-icon>
+                                                <a href="https://www.linkedin.com/in/hayden-garry" target="_blank" rel="noopener noreferrer" className="pl-2 hover:underline">
+                                                    Follow me on LinkedIn!
+                                                </a>
+                                            </div>
+
+                                            <div className="pt-5 flex items-center text-indigo-500 text-2xl dark:text-indigo-50">
+                                                <ion-icon name="logo-github"></ion-icon>
+                                                <a href="https://github.com/Hayden-git/capstone-project" target="_blank" rel="noopener noreferrer" className="pl-2 hover:underline">
+                                                    Check this project out on GitHub!
+                                                </a>
+                                            </div>
+                                            
                                             <div className="pt-5">
                                                 <p className="text-xl text-indigo-200 dark:text-indigo-200">
                                                   Hey there! I'm Hayden, a passionate software developer with a love for creating functional websites. This is my capstone project for my software engineering bootcamp.
                                                 </p>
                                             </div>
+
                                         </div>
                                         
                                     </div>
