@@ -30,7 +30,7 @@ export default function About() {
                     <div
                         className="flex h-full items-center rounded-lg bg-yellow-600 p-6 text-center text-white lg:pl-12 lg:text-left">
                         <div className="lg:pl-12">
-                            <h2 className="mb-4 text-3xl font-bold">What is a kava bar?</h2>
+                            <h2 className="mb-4 text-3xl font-bold">What is a kava bar like?</h2>
                             <p className="mb-4 pb-2 lg:pb-0">
                             Kratom and kava bars have emerged as a unique alternative, offering a refreshing departure from traditional bar culture. These venues provide a down-to-earth environment where patrons can unwind, socialize, work, or simply relax. Unlike noisy and alcohol-centric bars, kratom and kava bars offer an alternative space for individuals seeking a calming atmosphere. They also serve as a haven for remote workers who enjoy a cafe environment or those looking to enjoy the company of friends. All while sipping on herbal teas that promote relaxation and mental clarity.
                             </p>
@@ -68,7 +68,7 @@ export default function About() {
                             <h2 className="mb-4 text-3xl font-bold">What is Kava?</h2>
                                 Kava, on the other hand, originates from the Pacific islands, where it has been a staple of traditional ceremonies and gatherings for generations. The roots of the Piper methysticum plant are used to create a beverage that induces relaxation and tranquility without impairing cognitive function. Kava's active compounds, known as kavalactones, interact with neurotransmitters in the brain, promoting a sense of calm and reducing anxiety. The kava experience is characterized by its ability to ease stress while maintaining mental clarity.
                             <br />
-                            
+
                             <br />
                             <h2 className="mb-4 text-3xl font-bold">What is Kratom?</h2>
                                 Kratom, derived from the leaves of the Mitragyna speciosa tree, has gained attention for its potential to offer pain relief, boost mood, and aid in managing opioid withdrawal symptoms. The active compounds, mitragynine and 7-hydroxymitragynine, interact with opioid receptors in the brain, resulting in pain alleviation and mood enhancement. Kratom's effects are dose-dependent, with low doses inducing increased energy and focus, and higher doses leading to relaxation and sedation.
