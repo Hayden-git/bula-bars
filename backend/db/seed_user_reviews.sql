@@ -1,0 +1,12 @@
+
+-- INSERT INTO public.user_reviews (kava_bar_detail_id, user_id, review_text, rating)
+-- VALUES
+--     (1, 11, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 4.5),
+--     (1, 11, 'Pellentesque ac justo nec mi consequat iaculis.', 4.2),
+--     (2, 11, 'Nulla facilisi. Sed non velit at urna finibus tincidunt.', 4.0),
+--     (3, 12, 'Cras eleifend orci sit amet massa efficitur fringilla.', 5.0),
+--     (4, 13, 'Aliquam sagittis justo nec libero convallis, sit amet hendrerit dui fermentum.', 4.7),
+--     (5, 13, 'Fusce consectetur sem nec justo efficitur, nec facilisis velit feugiat.', 4.8),
+--     (6, 14, 'Suspendisse vehicula quam nec nisl volutpat, sit amet efficitur justo posuere.', 4.2),
+--     (7, 15, 'Vivamus cursus lectus a dolor dignissim, vel varius lorem fermentum.', 4.5),
+--     (8, 16, 'Phasellus ullamcorper ipsum nec metus dignissim, eget tristique ante tincidunt.', 4.9);

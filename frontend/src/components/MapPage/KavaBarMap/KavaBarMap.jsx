@@ -37,9 +37,13 @@ export default function KavaBarMap() {
                 <Popup>
                     <ul>
                         <li key={kavaBar.id}>
-                            <b>{kavaBar.bar_name}</b><br />
-                            Address: {kavaBar.address}<br />
-                            Ratings: {kavaBar.ratings}<br />
+                            <b className='underline'>{kavaBar.bar_name}</b>
+                            <br />
+                            <br />
+                            <strong className='underline'>Address:</strong> {kavaBar.address}
+                            <br />
+                            <br />
+                            <strong className='underline'>About the bar:</strong> {kavaBar.about_bar}<br />
                         </li>
                     </ul>
                 </Popup>

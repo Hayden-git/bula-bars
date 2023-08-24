@@ -9,7 +9,7 @@ export default function MapPage() {
           <ResultsList />
         </div>
 
-        <div>
+        <div className=''>
           <KavaBarMap/>
         </div> 
     </div>
