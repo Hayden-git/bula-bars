@@ -87,7 +87,7 @@ serverApp.post('/login', async (req, res) => {
     const user = await db.oneOrNone('SELECT * FROM public.users WHERE username = $1', [username]);
 
     if (user) {
-        // console.log(user) //
+        // console.log(user)
         // if there is a matching username, then compare password to hash
         bcrypt.compare(password, user.password, (error, result) => {
             if (result) {
@@ -99,6 +99,7 @@ serverApp.post('/login', async (req, res) => {
                     username: user.username,
                     email: user.email
                 };
+                // Comment out before production
                 console.log(req.session.user) // Example OUTPUT: { id: '12', username: 'bula12', email: 'bula12@gmail.com' } - when a user logs in... Here is there info from the database, and saved with sessions
                 res.send({ message: 'Login successful' });
             }

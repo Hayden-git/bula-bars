@@ -7,8 +7,8 @@ export default function NavBar() {
 
   let Links = [
     {name:'HOME', link:'/'},
-    {name:'ABOUT', link:'/'},
-    {name:'CONTACT', link:'/'}
+    {name:'ABOUT', link:'/about'},
+    {name:'CONTACT', link:'/contact'}
   ];
 
   // Responsive Design - Tailwind docs: https://tailwindcss.com/docs/responsive-design 
