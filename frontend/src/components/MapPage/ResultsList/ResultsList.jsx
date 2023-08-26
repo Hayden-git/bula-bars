@@ -11,21 +11,23 @@ import {
 
 import Swal from 'sweetalert2';
 
-export default function ResultsList() {
+export default function ResultsList({ userId, setUserId }) {
   const [kavaBars, setKavaBars] = useState([]);
   const [likedBars, setLikedBars] = useState([]);
   const [expandedKavaBar, setExpandedKavaBar] = useState(null);
   const [expandedReviews, setExpandedReviews] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);;
+  // const [isLoggedIn, setIsLoggedIn] = useState(true);;
   const [reviewText, setReviewText] = useState('');
 
-  const [userId, setUserId] = useState(null);
+
 
   const [isEditingReview, setIsEditingReview] = useState(false); // New state for editing mode
   const [selectedReview, setSelectedReview] = useState(null);
 
   // For pagination
   const [currentKavaBarIndex, setCurrentKavaBarIndex] = useState(0);
+
+
 
   const fetchBarData = () => {
     fetch('http://localhost:4001/api/bula-bars/locations')
@@ -38,90 +40,122 @@ export default function ResultsList() {
       });
   };
 
+  // THIS useEffect is doing a GET on the /login route to check if a user is logged in already... 
+  useEffect(() => {
+    // Check if the user is logged in
+    fetch('http://localhost:4001/login', {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("FROM useEffect() in ResultsList.jsx for /login GET", data, userId)
+        setUserId(userId)
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-const toggleLike = (kavaBarId) => {
-  if (likedBars.includes(kavaBarId)) {
-    setLikedBars(likedBars.filter((id) => id !== kavaBarId));
-  } else {
-    setLikedBars([...likedBars, kavaBarId]);
-    // console.log(...likedBars)
-  }
-};
+    fetchBarData(); // Fetch kava bar data when the component mounts
+  }, [setUserId, userId]);
 
-const handleSubmitReview = (event, kavaBarId, reviewText, userId) => {
-  event.preventDefault();
 
-  // Check if user is logged in
-  if (!isLoggedIn) {
-    // Show login alert if not logged it
-    handleLoginAlert();
-    return;
-  }
+  const toggleLike = (kavaBarId) => {
+    if (likedBars.includes(kavaBarId)) {
+      setLikedBars(likedBars.filter((id) => id !== kavaBarId));
+    } else {
+      setLikedBars([...likedBars, kavaBarId]);
+      // console.log(...likedBars)
+    }
+  };
 
-  fetch('http://localhost:4001/api/new-review', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include', 
-    body: JSON.stringify({
-      kavaBarId,
-      reviewText,
-      userId,
-    }),
-  })
-  .then((response) => response.json())
-  .then((data) => {
-    // Update the UI or fetch new data as needed
-    // Maybe updatedFetchBarData()???
-    fetchBarData();
-    // console.log(data)
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-};
+  // HANDLE New Review...
+  const handleSubmitReview = (event, kavaBarId, reviewText, userId) => {
+    event.preventDefault();
 
-const handleLoginAlert = () => {
-  Swal.fire({
-    title: 'Please log in to leave a review',
-    icon: 'warning',
-    footer: "<a style='text-decoration-line: underline;' href='/login'>Log in here</a>",
-  });
-};
+    // // Check if user is logged in
+    // if (!userId) {
+    //   // Show login alert if not logged it
+    //   handleLoginAlert();
+    //   return;
+    // }
 
-const handleEditReviewClick = (review) => {
-  setReviewText(review.review_text); // Set the review text to edit
-  setSelectedReview(review); // Set the selected review for editing
-  setIsEditingReview(true); // Activate editing mode
-};
-
-const handleEditReviewSubmit = (event, reviewId) => {
-  event.preventDefault();
-
-  // Check if user is logged in
-  if (!isLoggedIn) {
-    // Show login alert if not logged in
-    handleLoginAlert();
-    return;
-  }
-
-  // Submit the edited review
-  fetch(`http://localhost:4001/api/edit-review/${reviewId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    body: JSON.stringify({
-      kavaBarId: kavaBars[currentKavaBarIndex].id,
-      reviewText,
-    }),
-  })
+    fetch('http://localhost:4001/api/new-review', {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', 
+      body: JSON.stringify({
+        kavaBarId,
+        reviewText,
+        userId,
+      }),
+    })
     .then((response) => response.json())
     .then((data) => {
       // Update the UI or fetch new data as needed
       // Maybe updatedFetchBarData()???
+      setUserId(userId, data)
+      fetchBarData(data);
+      // console.log(data)
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  };
+
+  // const handleLoginAlert = () => {
+  //   Swal.fire({
+  //     title: 'Please log in to leave a review',
+  //     icon: 'warning',
+  //     footer: "<a style='text-decoration-line: underline;' href='/login'>Log in here</a>",
+  //   });
+  // };
+
+  // HANDLE Edit Review
+  const handleEditReviewClick = (review) => {
+    setReviewText(review.review_text); // Set the review text to edit
+    setSelectedReview(review); // Set the selected review for editing
+    setIsEditingReview(true); // Activate editing mode
+  };
+
+  const handleEditReviewSubmit = (event, reviewId) => {
+    event.preventDefault();
+
+    // // Check if user is logged in
+    // if (!userId) {
+    //   // Show login alert if not logged in
+    //   handleLoginAlert();
+    //   return;
+    // }
+
+    // Submit the edited review
+    fetch(`http://localhost:4001/api/edit-review/${reviewId}`, {
+      method: 'PUT',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        kavaBarId: kavaBars[currentKavaBarIndex].id,
+        reviewText,
+        userId,
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("FROM handleSubmitEditReview", data, userId)
+      // Update the UI or fetch new data as needed
+      // Maybe updatedFetchBarData()???
+      setUserId(userId)
+
       fetchBarData();
       setIsEditingReview(false); // Exit editing mode
       setReviewText(''); // Reset review text
@@ -130,25 +164,31 @@ const handleEditReviewSubmit = (event, reviewId) => {
     .catch((error) => {
       console.error(error);
     });
-};
+  };
 
 
-const handleDeleteReview = (review) => {
-  // Show a confirmation dialog before letting the user delete the review
-  Swal.fire({
-    title: 'Delete Review',
-    text: 'Are you sure you want to delete this review?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Delete',
-    cancelButtonText: 'Cancel',
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Send a DELETE request to the server
-      fetch(`http://localhost:4001/api/delete-review/${review.id}`, {
-        method: 'DELETE',
-        credentials: 'include', // Include credentials for the session
-      })
+  const handleDeleteReview = (review) => {
+    // Show a confirmation dialog before letting the user delete the review
+    Swal.fire({
+      title: 'Delete Review',
+      text: 'Are you sure you want to delete this review?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+    })
+    .then((result) => {
+      if (result.isConfirmed) {
+        // Send a DELETE request to the server
+        fetch(`http://localhost:4001/api/delete-review/${review.id}`, {
+          method: 'DELETE',
+          mode: 'cors',
+          credentials: 'include', // Include credentials for the session
+          body: JSON.stringify({
+            kavaBarId: kavaBars[currentKavaBarIndex].id,
+            reviewText,
+          }),
+        })
         .then((response) => response.json())
         .then((data) => {
           if (data.message === 'Review deleted successfully') {
@@ -162,33 +202,9 @@ const handleDeleteReview = (review) => {
           console.error(error);
           Swal.fire('Error', 'An error occurred while deleting the review', 'error');
         });
-    }
-  });
-};
-
-useEffect(() => {
-  // Check if the user is logged in
-  fetch('http://localhost:4001/login', {
-    method: 'GET',
-    mode: 'cors',
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      // console.log(data)
-      setIsLoggedIn(data.loggedIn); // Update login status
-      setUserId(data.userId); // Set the user's ID
-    })
-    .catch((error) => {
-      console.error(error);
+      }
     });
-
-  fetchBarData(); // Fetch kava bar data when the component mounts
-}, []);
-
+  };
 
 
   return (
@@ -288,12 +304,12 @@ useEffect(() => {
                   <div className='flex items-center justify-between'>
                     <p className='font-bold underline'>{`Review by: ${review.username}`}</p>
                     <div className='flex space-x-2'>
-                      {isLoggedIn && userId === review.userId && (
+                      {/* { userId === review.userId && ( */}
                         <>
                           <Button
                             type='button'
                             color='orange'
-                            ripple='light'
+                            ripple={true}
                             onClick={() => handleEditReviewClick(review)} // Handle edit click
                             className='text-2xl shadow-none bg-transparent text-indigo-700 hover:text-orange-500 duration-500'
                           >
@@ -302,14 +318,14 @@ useEffect(() => {
                           <Button
                             type='button'
                             color='orange'
-                            ripple='light'
+                            ripple={true}
                             onClick={() => handleDeleteReview(review)} // Handle delete click
                             className='text-2xl shadow-none bg-transparent text-indigo-700 hover:text-orange-500 duration-500'
                           >
                             <ion-icon name='trash-outline'></ion-icon>
                           </Button>
                         </>
-                      )}
+                      {/* )} */}
                     </div>
                   </div>
                   <p>{review.review_text}</p>
@@ -330,7 +346,7 @@ useEffect(() => {
               />
 
               <span className='font-bold text-5xl cursor-pointer flex items-center ml-6 text-indigo-700 hover:text-orange-500 duration-500'>
-                <Button type='submit' color='orange' ripple='light' size='sm'>
+                <Button type='submit' color='orange' ripple={true} size='sm'>
                   Save Changes
                 </Button>
               </span>
@@ -349,7 +365,7 @@ useEffect(() => {
               />
 
               <span className='font-bold text-5xl cursor-pointer flex items-center ml-6 mt-2 text-indigo-700 hover:text-orange-500 duration-500'>
-                <Button type='submit' color='orange' ripple='light' size='sm'>
+                <Button type='submit' color='orange' ripple={true} size='sm'>
                   Submit Review
                 </Button>
               </span>

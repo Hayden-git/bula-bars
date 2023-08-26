@@ -18,6 +18,7 @@ export default function Register() {
         
         fetch(url, {
             method: 'POST',
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
             },

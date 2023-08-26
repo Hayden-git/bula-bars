@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import NavBar from './components/NavBar/NavBar';
 import Footer from './components/Footer/Footer';
@@ -17,6 +17,10 @@ import About from './components/AboutPage/About';
 import Contact from './components/ContactPage/Contact';
 
 const App = () => {
+  const [userId, setUserId] = useState(12);
+
+  console.log("From APP", userId)
+
   return (
     <Router>
       <div className='bg-slate-100'>
@@ -24,7 +28,7 @@ const App = () => {
         <div className='relative min-h-screen'>
             <NavBar />
             <Routes>
-              <Route path='/' element={<MapPage />} />
+              <Route path='/' element={<MapPage userId={userId} setUserId={setUserId} />} />
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/about' element={<About />} />

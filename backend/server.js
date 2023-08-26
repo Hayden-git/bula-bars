@@ -18,7 +18,7 @@ serverApp.use(express.urlencoded({ extended: true}))
 serverApp.use(express.json())
 serverApp.use(
     cors({
-        origin: ['http://localhost:3000'],
+        origin: '*',
         methods: ['GET', 'PUT', 'POST'],
         credentials: true
     })
@@ -31,9 +31,10 @@ serverApp.use(
         key: 'userId',
         secret: process.env.SESSIONS_SECRET,
         resave: false,
-        saveUninitialized: false, 
+        saveUninitialized: true, 
         cookie: {
-            expires: 60 * 60 * 6,
+            sameSite: process.env.NODE_ENV === 'true' ? 'none' : 'lax',
+            expires: 60 * 60 * 24,
         }
     })
 );
@@ -41,102 +42,111 @@ serverApp.use(
 serverApp.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', '*');
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
 
 serverApp.set('view engine', 'ejs')
 
-// REGISTER / CREATE ACCOUNT
 serverApp.post('/register', async (req, res) => {
+    const { username, email, password } = req.body;
 
-    const { username, email, password } = req.body
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    let salted = await bcrypt.hash(password, saltRounds).then((salted, err) => {
-        if (salted) {
-            // res.send({ salted: salted })
-        }
-        return salted;
-    });
-    // Only use the console.log() to test if its working
-    // console.log(salted)
+        // Insert the user into the database
+        const user = await db.one(
+            'INSERT INTO public.users (username, email, password) VALUES ($1, $2, $3) RETURNING id, username, email',
+            [username, email, hashedPassword]
+        );
 
-    db.none(
-        'INSERT INTO public.users (username, email, password) VALUES ($1, $2, $3)',
-        [username, email, salted] 
-    );
-    res.send('Registered');   
+        // Set session variable to indicate the user is logged in
+        req.session.user = {
+            id: user.id,
+            username: user.username,
+            email: user.email
+        };
+        console.log("FROM /register route in server.js", req.session.user)
+
+        res.status(200).json({ message: 'Registered and logged in successfully' });
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).json({ error: 'Error registering user' });
+    }
 });
+
+// LOGIN POST to log a user in if they enter the right username & password 
+serverApp.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await db.oneOrNone('SELECT * FROM public.users WHERE username = $1', [username]);
+
+        if (user) {
+            bcrypt.compare(password, user.password, (error, result) => {
+                if (result) {
+                    req.session.user = {
+                        id: user.id,
+                        username: user.username,
+                        email: user.email
+                    };
+                    console.log("FROM /login POST route in server.js", req.session.user)
+
+                    res.send({ message: 'Login successful', username });
+                } else {
+                    res.send({ message: 'Wrong username/password' });
+                }
+            });
+        } else {
+            res.send({ message: 'No user found' });
+        }
+    } catch (error) {
+        console.error('Error logging in:', error);
+        res.status(500).json({ error: 'Error logging in' });
+    }
+});
+
+
+// Middleware to check if the user is authenticated
+const isAuthenticated = (req, res, next) => {
+    if (req.session.user) {
+        console.log("FROM isAuthenticated() Middleware in server.js", req.session.user)
+        next(); // User is authenticated, proceed to the next middleware/route
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+};
 
 // LOGIN GET to check if a user is logged in or not...
 serverApp.get('/login', (req, res) => {
+    // console.log(req.session)
     if(req.session.user) {
+        console.log("FROM /login GET route in server.js", req.session.user)
         res.send({ loggedIn: true});
     } else {
         res.send({ loggedIn: false });
     }
 })
 
-// LOGIN POST to log a user in if they enter the right username & password 
-serverApp.post('/login', async (req, res) => {
-
-    const { username, password } = req.body
-
-    // get user from db based on username
-    const user = await db.oneOrNone('SELECT * FROM public.users WHERE username = $1', [username]);
-
-    if (user) {
-        // console.log(user)
-        // if there is a matching username, then compare password to hash
-        bcrypt.compare(password, user.password, (error, result) => {
-            if (result) {
-                // req.session.user = result;
-
-                // Store user info in session - Maybe take out of production at demo day
-                req.session.user = {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email
-                };
-                // Comment out before production
-                console.log(req.session.user) // Example OUTPUT: { id: '12', username: 'bula12', email: 'bula12@gmail.com' } - when a user logs in... Here is there info from the database, and saved with sessions
-                res.send({ message: 'Login successful' });
-            }
-        })
-    } else if (user) {
-        bcrypt.compare(password, user.password, (error, result) => {
-            if (!result) {
-                res.send({ message: 'Wrong username/password', error});
-            }
-        }) 
-    } else {
-        res.send('No user found')
-    }
-
-
-});
-
 // Submit a new review
-serverApp.post('/api/new-review', async (req, res) => {
+serverApp.post('/api/new-review', isAuthenticated, async (req, res) => {
     const { kavaBarId, reviewText } = req.body;
-
-    // Check if the user is logged in before allowing review submission
-    if (!req.session.user || !req.session.user.id) {
-        return res.status(401).json({ error: 'Please log in to leave a review' });
-    }
 
     // A logged in user will have an assigned session ID
     const loggedInUserId = req.session.user.id;
+    console.log("FROM /new-review POST route in server.js", req.session.user.id)
 
     try {
         // Insert the review into the user_reviews table using the logged-in user's ID
-        await db.none(
+        await db.oneOrNone(
             'INSERT INTO public.user_reviews (kava_bar_detail_id, user_id, review_text) VALUES ($1, $2, $3)',
             [kavaBarId, loggedInUserId, reviewText]
         );
+        
 
-        res.status(200).json({ message: 'Review submitted successfully' });
+        res.status(200).json({ message: 'Review submitted successfully', kavaBarId, loggedInUserId, reviewText });
     } catch (error) {
         console.error('Error submitting review:', error);
         res.status(500).json({ error: 'Error submitting review' });
@@ -144,21 +154,18 @@ serverApp.post('/api/new-review', async (req, res) => {
 });
 
 // EDIT REVIEW
-serverApp.put('/api/edit-review/:reviewId', async (req, res) => {
+serverApp.put('/api/edit-review/:reviewId', isAuthenticated, async (req, res) => {
     const reviewId = req.params.reviewId;
     const { kavaBarId, reviewText } = req.body;
 
-    // Check if the user is logged in before allowing review editing
-    if (!req.session.user) {
-        return res.status(401).json({ error: 'Please log in to edit a review' });
-    }
-
     // users assined session ID
     const loggedInUserId = req.session.user.id;
+    console.log("FROM /edit-review PUT route in server.js", req.session.user.id)
+
 
     try {
         // Update the review text in the user_reviews table using the logged-in user's ID
-        await db.none(
+        await db.oneOrNone(
             'UPDATE public.user_reviews SET review_text = $1 WHERE id = $2 AND user_id = $3 AND kava_bar_detail_id = $4',
             [reviewText, reviewId, loggedInUserId, kavaBarId]
         );
@@ -172,16 +179,12 @@ serverApp.put('/api/edit-review/:reviewId', async (req, res) => {
 
 
 // DELETE REVIEW route
-serverApp.delete('/api/delete-review/:reviewId', async (req, res) => {
+serverApp.delete('/api/delete-review/:reviewId', isAuthenticated, async (req, res) => {
     const reviewId = req.params.reviewId;
-
-    // Check if the user is logged in before deleting
-    if (!req.session.user) {
-        return res.status(401).json({ error: 'Please log in to delete a review' });
-    }
 
     // users assined session ID
     const loggedInUserId = req.session.user.id;
+    console.log("FROM /delete-review DELETE route in server.js", req.session.user.id)
 
     try {
         // Delete the review from the user_reviews table using the logged-in user's ID
@@ -191,7 +194,7 @@ serverApp.delete('/api/delete-review/:reviewId', async (req, res) => {
         );
 
         if (result.rowCount === 1) {
-            res.status(200).json({ message: 'Review deleted successfully' });
+            res.status(200).json({ message: 'Review deleted successfully', reviewId, loggedInUserId });
         } else {
             res.status(404).json({ error: 'Review not found or unauthorized' });
         }
