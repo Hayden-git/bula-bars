@@ -94,7 +94,13 @@ serverApp.post('/login', async (req, res) => {
                     };
                     console.log("FROM /login POST route in server.js", req.session.user)
 
-                    res.send({ message: 'Login successful', username });
+                    // Example output of this res.send: Object { message: "Login successful", id: "12", username: "bula12", email: "bula12@gmail.com" }
+                    res.send({
+                        message: 'Login Successful',
+                        id: user.id,
+                        username: user.username,
+                        email: user.email
+                    });
                 } else {
                     res.send({ message: 'Wrong username/password' });
                 }

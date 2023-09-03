@@ -40,28 +40,38 @@ export default function ResultsList({ userId, setUserId }) {
       });
   };
 
-  // THIS useEffect is doing a GET on the /login route to check if a user is logged in already... 
+  // Check for an existing user session in sessionStorage
   useEffect(() => {
-    // Check if the user is logged in
-    fetch('http://localhost:4001/login', {
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("FROM useEffect() in ResultsList.jsx for /login GET", data, userId)
-        setUserId(userId)
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const storedUserId = sessionStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(storedUserId);
+    }
 
     fetchBarData(); // Fetch kava bar data when the component mounts
-  }, [setUserId, userId]);
+  }, [setUserId]);
+
+  // // THIS useEffect is doing a GET on the /login route to check if a user is logged in already... 
+  // useEffect(() => {
+  //   // Check if the user is logged in
+  //   fetch('http://localhost:4001/login', {
+  //     method: 'GET',
+  //     mode: 'cors',
+  //     credentials: 'include',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       console.log("FROM useEffect() in ResultsList.jsx for /login GET", data, userId)
+  //       setUserId(userId)
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+
+  //   fetchBarData(); // Fetch kava bar data when the component mounts
+  // }, [setUserId, userId]);
 
 
   const toggleLike = (kavaBarId) => {

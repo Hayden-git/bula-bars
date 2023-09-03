@@ -3,12 +3,17 @@ import React, { useEffect, useState } from 'react';
 
 import Swal from 'sweetalert2';
 
-export default function Login() {
+export default function Login({ setUserId }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    // const [loginStatus, setLoginStatus] = useState('');
-
+    // // Check for an existing session in sessionStorage when the component loads
+    // useEffect(() => {
+    //     const storedUserId = sessionStorage.getItem('userId');
+    //     if (storedUserId) {
+    //         setUserId(storedUserId);
+    //     }
+    // }, [setUserId]);
 
     const login = async (event) => {
         const url = 'http://localhost:4001/login';
@@ -30,33 +35,41 @@ export default function Login() {
             // console.log(response)
             return response.json();
         })
-        .then((data) => { 
-
-            // Logs data without showing login credentials => Object: { message: 'Login Successful' } 
-            console.log(data);
-            
-            Swal.fire({
-                title: `Welcome ${username}!`,
-                icon: 'success',
-                text: 'You are now logged in :) Bula!',
-                footer: "<a style='text-decoration-line: underline;' href='/'>Click here to go back to the homepage!</a>"
-            });
+        .then((data) => {
+            // console.log("FROM Login .then data in React frontend", data)
+            if (data.message === 'Login Successful') {
+                // Set the userId in App component after successful login
+                setUserId(data.id);
+                Swal.fire({
+                  title: `Welcome ${username}!`,
+                  icon: 'success',
+                  text: 'You are now logged in :) Bula!',
+                  footer: "<a style='text-decoration-line: underline;' href='/'>Click here to go back to the homepage!</a>",
+                });
+            } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Cannot find that user :(',
+                  footer: "<a style='text-decoration-line: underline;' href='/register'>Click here to make an account!</a>",
+                });
+            }
         })
         .catch((error) => {
-
-            // If no user exists, bada bing bada boom
-            if (error) {
-                console.info('Could not find account by that username/password', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Cannot find that user :(',
-                    footer: "<a style='text-decoration-line: underline;' href='/register'>Click here to make an account!</a>"
-                })
-            }    
+          console.error(error);
         });
+    
         event.preventDefault();
     }
+
+    // Check for an existing session in sessionStorage when the component loads
+    useEffect(() => {
+        const storedUserId = sessionStorage.getItem('userId');
+        if (storedUserId) {
+            setUserId(storedUserId);
+        }
+    }, [setUserId]);
+
 
     // Checks for existing express-sessions user(s), logs boolean value if logged in OR not
     useEffect(() => {
