@@ -30,12 +30,12 @@ export default function NavBar() {
           <li className='md:ml-8 text-2xl md:my-0 my-4 text-indigo-800 hover:text-orange-500 duration-500'>
             <Link to='/about'>About</Link>
           </li>
-          <li className='md:ml-8 text-2xl md:my-0 my-4 text-indigo-800 hover:text-orange-500 duration-500'>
+          <li className='md:ml-8 text-2xl md:my-0 my-4 pr-4 text-indigo-800 hover:text-orange-500 duration-500'>
             <Link to='/contact'>Contact</Link>
           </li>
 
           {/* Search Bar */}
-          <div className='flex justify-between md:ml-8 md:my-0 my-4 w-full transition-all duration-500 ease-in'>
+          {/* <div className='flex justify-between md:ml-8 md:my-0 my-4 w-full transition-all duration-500 ease-in'>
             <form 
               action=''
             >
@@ -48,7 +48,7 @@ export default function NavBar() {
                 className='px-3 py-3 mr-[-30px] font-semibold placeholder-gray-500 text-black rounded-2xl border-indigo ring-2 ring-indigo-500 focus:ring-indigo-500 focus:ring-2s w-full md:w-48'
               />
             </form>
-          </div>
+          </div> */}
           
           {/* Log in / Registration Button */}
           <button className='bg-indigo-800 text-white font-[Poppins] py-2 px-10 rounded lg:ml-1 mr-4 md:ml-8 hover:bg-orange-500 duration-500'>
