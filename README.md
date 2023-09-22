@@ -19,6 +19,8 @@ This project is organized into two main folders:
 
 - **User Authentication:** Users can create accounts, log in, and securely authenticate themselves.
 
+- **Hashed Passwords:** When users create an account, their password will be hashed in the database. This adds a fundamental level of security that, although not perfect, is vital for any web application. Making this work was one of my bigger struggles but I learned a lot!!!
+
 - **Location-based Search:** Bula Bars utilizes geolocation to find nearby kratom and kava bars based on the user's current location.
 
 - **Detailed Listings:** Each bar listing includes essential information such as name, address, contact details, business hours, user reviews, and more.
