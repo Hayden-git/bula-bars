@@ -4,7 +4,8 @@
 
 Bula Bars is a web application built using the PERN stack (PostgreSQL, Express, React, Node.js) that allows users to discover kratom and kava bars in their vicinity. Whether you're a seasoned enthusiast or a curious newcomer, Bula Bars makes it easy to find and explore these unique establishments that offer a variety of kratom and kava products.
 
-![Bula Bars Screenshot](link_to_screenshot.png)
+![screenshot_of_homepage](https://github.com/Hayden-git/capstone-project/assets/105612431/8773f12e-22dd-4ae6-b0b6-ba388baafa80)
+
 
 ## Project Structure
 
