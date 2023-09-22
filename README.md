@@ -1,5 +1,4 @@
-
-                   ![image](https://github.com/Hayden-git/capstone-project/assets/105612431/f08b3e2d-c9f0-4526-9f2c-397966198329)
+![image](https://github.com/Hayden-git/capstone-project/assets/105612431/f08b3e2d-c9f0-4526-9f2c-397966198329)
 
 Bula Bars is a fullstack web application built using the PERN stack (PostgreSQL database, Express, React, Node.js, and visual design with Tailwind CSS) that allows users to discover kratom and kava bars in their vicinity. Are you looking for a nice place to relax, do some work, or enjoy events/live music? Try a kava bar! Currently, the database is manually populated and so it is limited to kava bars around the Tampa, Florida area. 
 
