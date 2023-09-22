@@ -9,11 +9,12 @@ Bula Bars is a fullstack web application built using the PERN stack (PostgreSQL 
 ## Project Structure
 
 This project is organized into two main folders:
-![image](https://github.com/Hayden-git/capstone-project/assets/105612431/23b2dcd2-e99f-4397-8e8b-efefa32b1574)
 
 - **backend:** Contains the server-side code built with Node.js, Express.js, and PostgreSQL. It handles data storage, user authentication, and API endpoints.
+- ![image](https://github.com/Hayden-git/capstone-project/assets/105612431/40124e53-3d7f-41cb-9567-3efbe0a7f479)
 
-- **frontend:** Houses the client-side code built with React. It provides the user interface for interacting with the application. 
+- **frontend:** Houses the client-side code built with React. It provides the user interface for interacting with the application.
+- ![image](https://github.com/Hayden-git/capstone-project/assets/105612431/bdf74cf8-473e-4027-9c38-029ce6a62988)
 
 ## Features
 
