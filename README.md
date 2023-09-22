@@ -69,15 +69,15 @@ Before you start, make sure you have the following software installed:
 4. The Bula Bars application should now be running locally, open your browser and navigate to local host.
 
 ## Acknowledgments
--**React.js
--**Node.js
--**Express.js
--**PostgreSQL relatonal database
--**Tailwind CSS
--**Express sessions
--**User persistence
--**bcrypt password hashing
--**Leaflet JS interactive map
+- **React.js**
+- **Node.js**
+- **Express.js**
+- **PostgreSQL relatonal database**
+- **Tailwind CSS**
+- **Express sessions**
+- **User persistence**
+- **bcrypt password hashing**
+- **Leaflet JS interactive map**
 
 ## Contact
 If you have any questions, suggestions, or contributions please feel free to reach out to me at [hayden.garry99@gmail.com].
