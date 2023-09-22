@@ -1,9 +1,7 @@
 
 ![image](https://github.com/Hayden-git/capstone-project/assets/105612431/f08b3e2d-c9f0-4526-9f2c-397966198329)
 
-
-
-Bula Bars is a web application built using the PERN stack (PostgreSQL, Express, React, Node.js) that allows users to discover kratom and kava bars in their vicinity. Whether you're a seasoned enthusiast or a curious newcomer, Bula Bars makes it easy to find and explore these unique establishments that offer a variety of kratom and kava products.
+Bula Bars is a fullstack web application built using the PERN stack (PostgreSQL database, Express, React, Node.js, and visual design with Tailwind CSS) that allows users to discover kratom and kava bars in their vicinity. Are you looking for a nice place to relax, do some work, or enjoy events/live music? Try a kava bar! Currently, the database is manually populated and so it is limited to kava bars around the Tampa, Florida area. 
 
 ![screenshot_of_homepage](https://github.com/Hayden-git/capstone-project/assets/105612431/8773f12e-22dd-4ae6-b0b6-ba388baafa80)
 
@@ -11,10 +9,11 @@ Bula Bars is a web application built using the PERN stack (PostgreSQL, Express, 
 ## Project Structure
 
 This project is organized into two main folders:
+![image](https://github.com/Hayden-git/capstone-project/assets/105612431/23b2dcd2-e99f-4397-8e8b-efefa32b1574)
 
 - **backend:** Contains the server-side code built with Node.js, Express.js, and PostgreSQL. It handles data storage, user authentication, and API endpoints.
 
-- **frontend:** Houses the client-side code built with React. It provides the user interface for interacting with the application.
+- **frontend:** Houses the client-side code built with React. It provides the user interface for interacting with the application. 
 
 ## Features
 
