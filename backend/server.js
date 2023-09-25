@@ -7,6 +7,7 @@ const serverApp = express();
 const pgp = require('pg-promise')(/*options*/);
 const db = pgp(process.env.DB_CONNECTION);
 
+
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const saltRounds = bcrypt.genSaltSync(10);
