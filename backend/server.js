@@ -1,5 +1,6 @@
 
 require('dotenv').config();
+const PORT = 4001;
 
 const express = require('express');
 const serverApp = express();
@@ -218,8 +219,8 @@ const bulaBarsRoutes = require('./routes/bula-bars');
 // Use the bula-bar route
 serverApp.use('/api/bula-bars', bulaBarsRoutes);
 
-// Start the server
-serverApp.listen(4001, () => {
-    console.log('Server is listening on port 4001');
-});
 
+
+serverApp.listen(process.env.PORT || PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
+});
