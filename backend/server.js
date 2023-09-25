@@ -15,6 +15,7 @@ const cookieParser= require('cookie-parser')
 const session = require('express-session');
 
 
+
 serverApp.use(express.static('public'))
 serverApp.use(express.urlencoded({ extended: true}))
 serverApp.use(express.json())
