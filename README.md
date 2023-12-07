@@ -82,4 +82,4 @@ Before you start, make sure you have the following software installed:
 ## Contact
 If you have any questions, suggestions, or contributions please feel free to reach out to me at [hayden.garry99@gmail.com].
 
-Happy exploring the world of kratom and kava bars with Bula Bars!
+Have fun exploring your kratom and kava bars with Bula Bars! Sip Responsibly!
